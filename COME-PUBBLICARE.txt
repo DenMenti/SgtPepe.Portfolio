@@ -1,0 +1,42 @@
+PUBBLICARE IL SITO SU GITHUB PAGES
+==================================
+
+Il repository qui è già pronto: file aggiunti, primo commit fatto,
+remote impostato su https://github.com/DenMenti/DenMenti.github.io.git
+
+Mancano solo due passaggi, che richiedono il tuo accesso a GitHub.
+
+
+1. CREA IL REPOSITORY VUOTO
+   Vai su  https://github.com/new
+   - Repository name:  DenMenti.github.io      <-- esattamente così
+   - Public
+   - NON spuntare "Add a README file"
+   - Create repository
+
+
+2. CARICA I FILE
+   Apri il Terminale del Mac e incolla:
+
+       cd ~/Sites/DenMenti.github.io
+       git push -u origin main
+
+   Git ti chiederà di autenticarti: si apre il browser, confermi, finito.
+
+
+FATTO. Il sito sarà online entro un minuto su:
+
+       https://denmenti.github.io
+
+Per i repository chiamati <utente>.github.io, GitHub Pages si attiva da solo:
+non devi toccare nessuna impostazione.
+
+
+PER AGGIORNARE IL SITO IN FUTURO
+--------------------------------
+Modifichi index.html, poi:
+
+    cd ~/Sites/DenMenti.github.io
+    git add -A
+    git commit -m "cosa hai cambiato"
+    git push
