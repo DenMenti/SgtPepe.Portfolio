@@ -6,7 +6,7 @@ Sito statico in un unico file: `index.html` contiene HTML, CSS, JavaScript,
 i pittogrammi dell'immagine coordinata in SVG e le immagini dei progetti
 incorporate. Nessuna dipendenza da installare, nessun passaggio di build.
 
-Pubblicato con GitHub Pages: https://denmenti.github.io
+Pubblicato con GitHub Pages: https://denmenti.github.io/SgtPepe.Portfolio
 
 ## Modifiche
 
