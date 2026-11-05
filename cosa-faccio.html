@@ -1,0 +1,647 @@
+<meta charset="utf-8">
+<title>Cosa faccio — Sergente Pepe</title>
+<meta name="description" content="Art direction, pubblicità, brand e identity, editoria, ambienti, illustrazione e 3D, linee di prodotto, multimedia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+<style>
+  /* =======================================================================
+     Sergente Pepe — portfolio
+     Ricostruito sul mockup Figma: fondo bianco, testi neri, IBM Plex Sans.
+     Misure prese dal frame Figma 1440 (sidebar 451, colonna testo 600→1250).
+     ======================================================================= */
+  :root{
+    --black:      #161615;
+    --text:       #2b2b2a;
+    --gray:       #8a8a86;
+    --gray-mid:   #55554f;
+    --yellow:     #ffcf00;
+    --line:       #dcdcd8;
+    --sidebar-w:  451px;
+    --content-w:  650px;
+    --side-pad:   80px;
+
+    --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+
+    color-scheme: light;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+  body{
+    margin:0;
+    background:#fff;
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:15px;
+    line-height:26px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  img{ display:block; max-width:100%; }
+  button{ font:inherit; }
+  h1,h2,h3{ margin:0; font-weight:700; color:var(--black); }
+  hr{ border:0; height:1px; background:var(--line); margin:0; }
+
+  /* ===================== SIDEBAR (fissa, sinistra) ===================== */
+  .sidebar{
+    position:fixed; top:0; left:0; z-index:60;
+    width:var(--sidebar-w); height:100dvh;
+    padding:40px var(--side-pad) 0 var(--side-pad);
+    background:#fff;
+    display:flex; flex-direction:column;
+    overflow-y:auto;
+    transition:transform .3s ease;
+  }
+  /* il logo si riduce al primo scroll e tutto il blocco sale di conseguenza
+     (misure dal frame Figma: 176→99 di larghezza, stacco 231→119) */
+  .logo{
+    display:block; width:176px; flex:none;
+    margin-bottom:231px;
+    transition:width .45s ease, margin-bottom .45s ease;
+  }
+  .logo svg{ width:100%; height:auto; display:block; }
+  .sidebar.scrolled .logo{ width:99px; margin-bottom:119px; }
+
+  /* su schermi bassi gli stacchi verticali si comprimono per non tagliare i contatti */
+  @media (max-height:900px){
+    .logo{ margin-bottom:120px; }
+    .sidebar.scrolled .logo{ margin-bottom:64px; }
+  }
+  @media (max-height:760px){
+    .logo{ width:140px; margin-bottom:56px; }
+    .sidebar.scrolled .logo{ width:88px; margin-bottom:32px; }
+  }
+
+  .side-rule{ width:254px; }
+
+  .identity{ margin-top:33px; }
+  .identity .name{ font-weight:600; color:var(--black); }
+  .identity .role{ font-style:italic; color:var(--gray-mid); }
+
+  .contacts{ margin-top:52px; margin-bottom:45px; }
+  .contacts a{ display:block; color:var(--text); }
+  .contacts a:hover{ color:var(--black); text-decoration:underline; }
+
+  .side-spacer{ flex:1 1 auto; }
+  .side-foot{ font-size:13px; line-height:26px; color:var(--gray); padding-bottom:56px; }
+
+  /* nav verticale: esiste solo nel menù mobile a scomparsa */
+  .drawer-nav{ display:none; flex-direction:column; }
+  .drawer-nav a{
+    padding:14px 0; color:var(--text);
+    border-bottom:1px solid var(--line);
+  }
+  .drawer-nav a:first-child{ border-top:1px solid var(--line); }
+  .drawer-nav a.active{ color:var(--black); font-weight:600; }
+
+  /* ============ TOP BAR: compare al primo scroll con nav + flush ============ */
+  .topbar{
+    position:fixed; top:0; left:0; right:0; height:108px; z-index:50;
+    background:#fff;
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease;
+  }
+  .topbar.show{ opacity:1; pointer-events:auto; }
+
+  /* il menù non scende dall'alto: si compone da sinistra verso destra,
+     una voce dopo l'altra, e il marchio flush arriva per ultimo */
+  .topnav a, .flush{
+    opacity:0; transform:translateX(-16px);
+    transition:opacity .4s ease, transform .45s cubic-bezier(.22,.61,.36,1);
+  }
+  .topbar.show .topnav a, .topbar.show .flush{ opacity:1; transform:translateX(0); }
+  .topbar.show .topnav a:nth-child(1){ transition-delay:.00s; }
+  .topbar.show .topnav a:nth-child(2){ transition-delay:.07s; }
+  .topbar.show .topnav a:nth-child(3){ transition-delay:.14s; }
+  .topbar.show .topnav a:nth-child(4){ transition-delay:.21s; }
+  .topbar.show .topnav a:nth-child(5){ transition-delay:.28s; }
+  .topbar.show .flush{ transition-delay:.37s; }
+  @media (prefers-reduced-motion: reduce){
+    .topnav a, .flush{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* stessa gabbia del contenuto, così la nav parte esattamente sul filo
+     del bordo sinistro della colonna di testo */
+  .tb-inner{ margin-left:var(--sidebar-w); height:100%; display:flex; align-items:center; }
+  .tb-navwrap{ max-width:var(--content-w); width:100%; margin:0 auto; }
+  .topnav{ display:flex; gap:48px; }
+  .topnav a{ color:var(--text); padding-bottom:3px; border-bottom:1.5px solid transparent; }
+  .topnav a:hover{ color:var(--black); }
+  .topnav a.active{ color:var(--black); border-color:var(--black); }
+
+  .flush{
+    position:absolute; right:47px; top:50%; margin-top:-11px;
+    font-weight:700; font-size:22px; line-height:1; color:var(--black);
+    letter-spacing:-.01em; white-space:nowrap;
+  }
+
+  /* ===================== CONTENUTO (scrollabile, destra) ===================== */
+  .content{ margin-left:var(--sidebar-w); }
+  .wrap{ max-width:var(--content-w); margin:0 auto; padding:276px 0 180px; }
+
+  .mark{ width:152px; height:152px; color:var(--black); }
+  .mark svg{ width:100%; height:100%; display:block; }
+  .mark.yellow{ color:var(--yellow); }
+
+  /* I pittogrammi ruotano allo scroll attorno al centro della circonferenza
+     implicita, non al centro del proprio riquadro: per il semicerchio quel
+     centro cade sul bordo piatto, per quello a 45 gradi è fuori asse. */
+  .mark svg{ transform-origin:50% 50%; will-change:transform; }
+  .mark[data-spin="semi"] svg{ transform-origin:50% 26.07%; }
+  .mark[data-spin="semi45"] svg{ transform-origin:57.14% 42.99%; }
+  @media (prefers-reduced-motion: reduce){ .mark svg{ transform:none !important; } }
+
+  .headline{
+    margin-top:63px;
+    font-size:32px; line-height:47px; letter-spacing:-.01em;
+  }
+  /* il payoff di apertura ha interlinea più stretta del resto:
+     sono quattro righe brevi, stanno meglio compatte */
+  .hero .headline{ line-height:40px; }
+  .tag{ margin:32px 0 0; font-size:15px; color:var(--gray); }
+  .tag + hr{ margin-top:11px; }
+
+  section + section{ margin-top:150px; }
+
+  /* rivelazione del testo allo scroll: compare dall'alto verso il basso */
+  .reveal > *{
+    opacity:0; transform:translateY(-14px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.in > *{ opacity:1; transform:none; }
+  .reveal.in > *:nth-child(1){ transition-delay:.00s; }
+  .reveal.in > *:nth-child(2){ transition-delay:.07s; }
+  .reveal.in > *:nth-child(3){ transition-delay:.14s; }
+  .reveal.in > *:nth-child(4){ transition-delay:.21s; }
+  .reveal.in > *:nth-child(5){ transition-delay:.28s; }
+  .reveal.in > *:nth-child(6){ transition-delay:.35s; }
+  .reveal.in > *:nth-child(7){ transition-delay:.42s; }
+  .reveal.in > *:nth-child(8){ transition-delay:.49s; }
+  .reveal.in > *:nth-child(9){ transition-delay:.56s; }
+  .reveal.in > *:nth-child(n+10){ transition-delay:.63s; }
+  @media (prefers-reduced-motion: reduce){
+    .reveal > *{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* interlinea più stretta nei blocchi di testo discorsivo:
+     i paragrafi restano compatti, l'impaginato generale non si muove */
+  .bio p,
+  .pd-text p,
+  .service-item p,
+  .exp-brands .list,
+  details.credits .credit-body p{ line-height:23px; }
+
+  /* ---------- chi sono ---------- */
+  .bio{ margin-top:63px; }
+  .bio p{ margin:0 0 27px; }
+  .bio p:last-child{ margin-bottom:0; }
+
+  /* ---------- esperienza ---------- */
+  .exp-item{ padding:30px 0; border-top:1px solid var(--line); }
+  .exp-item:first-child{ margin-top:34px; border-top:0; }
+  .exp-item:last-child{ border-bottom:1px solid var(--line); }
+  .exp-years{ color:var(--gray); }
+  .exp-item h3{ font-size:18px; line-height:28px; margin-top:2px; }
+  .exp-item .place{ font-style:italic; color:var(--gray-mid); }
+  .exp-brands{ margin-top:16px; }
+  .exp-brands .label{ font-weight:600; color:var(--black); }
+  .exp-brands .list{ color:var(--text); }
+
+  /* ---------- cosa faccio ---------- */
+  .service-list{ margin-top:34px; }
+  .service-item{ display:flex; gap:12px; margin-bottom:24px; }
+  .service-item:last-child{ margin-bottom:0; }
+  .service-item .bullet{ flex:none; font-size:9px; line-height:26px; color:var(--gray); }
+  .service-item h3{ font-size:15px; line-height:26px; font-weight:600; }
+  .service-item p{ margin:0; }
+
+  /* ---------- filtro del portfolio per tag ---------- */
+  .filtri{ display:flex; flex-wrap:wrap; gap:7px; margin-top:30px; }
+  .filtri button{
+    font:inherit; font-size:12px; line-height:20px;
+    background:none; border:1px solid var(--line); border-radius:3px;
+    padding:3px 10px; color:var(--gray-mid); cursor:pointer;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .filtri button:hover{ color:var(--black); border-color:var(--gray); }
+  .filtri button[aria-pressed="true"]{ background:var(--black); border-color:var(--black); color:#fff; }
+  .filtri .conteggio{ opacity:.5; margin-left:.45em; }
+  .work[hidden]{ display:none; }
+  .work-grid .work{ animation:comparsa .28s ease both; }
+  @keyframes comparsa{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+
+  /* ---------- portfolio ---------- */
+  .work-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:34px 24px; margin-top:34px; }
+  .work-frame{ aspect-ratio:4/3; overflow:hidden; background:#f2f2f0; }
+  .work-frame img{ width:100%; height:100%; object-fit:cover; }
+  .work-meta{ display:flex; justify-content:space-between; margin-top:14px; color:var(--gray); font-size:13px; }
+  .work h3{ font-size:17px; line-height:26px; margin-top:4px; }
+  .work .client{ color:var(--gray-mid); }
+  .tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+  .tags span{ font-size:12px; line-height:20px; background:#f2f2f0; border-radius:3px; padding:2px 8px; color:var(--gray-mid); }
+
+  details.credits{ margin-top:14px; border-top:1px solid var(--line); padding-top:12px; }
+  details.credits summary{ cursor:pointer; list-style:none; display:flex; gap:.55em; align-items:baseline; color:var(--gray-mid); }
+  details.credits summary::-webkit-details-marker{ display:none; }
+  details.credits summary::before{ content:"▶"; font-size:9px; color:var(--gray); }
+  details.credits[open] summary::before{ content:"▼"; }
+  details.credits .credit-body{ padding-top:10px; }
+  details.credits .credit-body p{ margin:0 0 14px; }
+  details.credits .credit-body dl{ margin:0; font-size:13px; line-height:22px; }
+  details.credits .credit-body dt{ display:inline; color:var(--gray); }
+  details.credits .credit-body dd{ display:inline; margin:0 1.2em 0 .4em; }
+
+  /* ===================== scheda progetto (overlay) ===================== */
+  .work-open{ display:block; color:inherit; cursor:pointer; }
+  .work-open .work-frame img{ transition:transform .5s ease; }
+  .work-open:hover .work-frame img{ transform:scale(1.03); }
+  .work-open:hover h3{ text-decoration:underline; text-underline-offset:3px; }
+  .work-open:focus-visible{ outline:2px solid var(--black); outline-offset:4px; }
+
+  .overlay{
+    position:fixed; inset:0; z-index:200;
+    background:#fff; overflow-y:auto;
+    opacity:0; transition:opacity .28s ease;
+  }
+  .overlay.show{ opacity:1; }
+  .overlay[hidden]{ display:none; }
+  .overlay-close{
+    position:fixed; top:26px; right:36px; z-index:210;
+    width:44px; height:44px; border:0; background:#fff; cursor:pointer;
+    font-size:30px; line-height:1; color:var(--black);
+  }
+  .overlay-close:hover{ color:var(--gray-mid); }
+  .pd-wrap{ max-width:900px; margin:0 auto; padding:92px 24px 140px; }
+  .pd{ display:none; }
+  .pd.active{ display:block; }
+  .pd-back{ color:var(--gray); display:inline-block; margin-bottom:46px; }
+  .pd-back:hover{ color:var(--black); }
+  .pd .mark{ width:104px; height:104px; margin-bottom:34px; }
+  .pd h2{ font-size:44px; line-height:54px; letter-spacing:-.015em; margin-bottom:34px; }
+  .pd-props{ margin-bottom:46px; }
+  .pd-prop{
+    display:grid; grid-template-columns:150px minmax(0,1fr); gap:16px;
+    padding:9px 0; border-bottom:1px solid var(--line);
+  }
+  .pd-prop:first-child{ border-top:1px solid var(--line); }
+  .pd-prop dt{ color:var(--gray); }
+  .pd-prop dd{ margin:0; }
+  .pd-text{ max-width:650px; }
+  .pd-sub{ font-size:15px; line-height:26px; font-weight:600; color:var(--black); margin:36px 0 10px; }
+  .pd-list{ margin:0; padding:0; list-style:none; }
+  .pd-list li{ display:flex; gap:12px; margin-bottom:6px; }
+  .pd-list li::before{ content:"\25B6"; flex:none; font-size:9px; line-height:26px; color:var(--gray); }
+  .pd-text p{ margin:0 0 20px; }
+  .pd-text .credits-list{ margin:26px 0 0; font-size:14px; }
+  .pd-text .credits-list dt{ display:inline; color:var(--gray); }
+  .pd-text .credits-list dd{ display:inline; margin:0 1.6em 0 .7em; }
+  .pd-gallery{ margin-top:54px; display:flex; flex-direction:column; gap:22px; }
+  .pd-gallery img{ width:100%; height:auto; }
+  body.locked{ overflow:hidden; }
+
+  @media (max-width:900px){
+    .overlay-close{ top:12px; right:14px; }
+    .pd-wrap{ padding:70px 20px 90px; }
+    .pd h2{ font-size:30px; line-height:38px; }
+    .pd .mark{ width:76px; height:76px; }
+    .pd-prop{ grid-template-columns:1fr; gap:2px; padding:11px 0; }
+  }
+
+  /* ===================== barra mobile + menù a scomparsa ===================== */
+  .mobile-bar{ display:none; }
+  .menu-toggle{
+    background:none; border:0; padding:6px; cursor:pointer;
+    width:40px; height:34px; flex-direction:column; justify-content:center; gap:5px;
+  }
+  .menu-toggle span{ display:block; width:22px; height:1.5px; background:var(--black); }
+  .scrim{ display:none; }
+
+  @media (max-width:1180px){
+    :root{ --sidebar-w:380px; --side-pad:48px; }
+    .wrap{ padding-top:200px; }
+  }
+
+  @media (max-width:900px){
+    :root{ --sidebar-w:300px; }
+    .sidebar{
+      width:86vw; max-width:340px; padding-top:32px;
+      transform:translateX(-100%);
+      box-shadow:12px 0 40px rgba(0,0,0,.10);
+      overflow-y:auto;
+    }
+    .sidebar.open{ transform:translateX(0); }
+    .sidebar.scrolled .logo{ width:132px; margin-bottom:40px; }
+    .logo{ width:132px; margin-bottom:40px; }
+    .side-rule{ width:100%; }
+    .drawer-nav{ display:flex; margin:24px 0; }
+    .side-foot{ padding-bottom:32px; }
+
+    .topbar{ display:none !important; }
+    .mobile-bar{
+      display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:40;
+      background:#fff; padding:14px 20px;
+    }
+    .mobile-bar .m-logo{ width:74px; }
+    .mobile-bar .m-logo svg{ width:100%; height:auto; display:block; }
+    .menu-toggle{ display:flex; }
+    .scrim{
+      display:block; position:fixed; inset:0; z-index:55;
+      background:rgba(20,20,18,.35);
+      opacity:0; pointer-events:none; transition:opacity .25s ease;
+    }
+    .scrim.show{ opacity:1; pointer-events:auto; }
+
+    .content{ margin-left:0; }
+    .wrap{ max-width:none; padding:48px 20px 90px; }
+    .mark{ width:104px; height:104px; }
+    .headline{ margin-top:40px; font-size:25px; line-height:36px; }
+    .hero .headline{ line-height:31px; }
+    .tag{ margin-top:24px; }
+    section + section{ margin-top:90px; }
+    .bio{ margin-top:40px; }
+    .lb{ display:none; }
+    .work-grid{ grid-template-columns:1fr; }
+  }
+</style>
+
+<body>
+
+<div class="scrim" id="scrim"></div>
+
+<aside class="sidebar scrolled" id="sidebar">
+
+  <a class="logo" href="index.html" aria-label="Sgt. Pepe — home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 725 973"><g><g transform="translate(-29.475 -29.52)"><path d="M267.191,148.232a78.91,78.91,0,1,0,78.91,78.91A78.91,78.91,0,0,0,267.191,148.232Zm34.058,78.91v.171a34.149,34.149,0,1,1-68.3,0v-.171h.186v-.174a34.149,34.149,0,0,1,68.3,0v.174Z" transform="translate(395.375 286.657)" fill="#ffcf00"/><path d="M101.8,203.712a34.176,34.176,0,0,1-14.524-27.949l.093-33.583v-.174a34.149,34.149,0,0,1,68.3,0v.174l-.048,33.743h44.714V142.181a78.908,78.908,0,1,0-157.816,0v33.583a78.967,78.967,0,0,0,33.624,64.62l64.909,42.8a34.181,34.181,0,0,1,14.524,27.949l-.093,33.587v.171a34.149,34.149,0,1,1-68.3,0v-.171l.048-44.722H42.52v44.722a78.908,78.908,0,1,0,157.816,0V311.128a78.972,78.972,0,0,0-33.624-64.62Z" transform="translate(0.122 56.272)" fill="#161615"/><g transform="translate(42.475 514.748)"><path d="M72.023,231.354a34.138,34.138,0,0,0-29.548-17.022l.093-44.584a78.769,78.769,0,0,1,62.163,30.3Z" transform="translate(-42.475 -169.748)" fill="#161615"/><path d="M121.426,169.748A78.906,78.906,0,0,0,42.52,248.654v395.29H87.383V523.4a78.766,78.766,0,0,0,112.953-71.1V248.654A78.907,78.907,0,0,0,121.426,169.748Zm34.058,282.72a34.148,34.148,0,0,1-68.1,3.637V343.884h-.2V248.609a34.149,34.149,0,0,1,68.3,0Z" transform="translate(-42.353 -169.748)" fill="#161615"/></g><path d="M170.034,63.271a78.908,78.908,0,0,0-78.91,78.91V344.714a78.91,78.91,0,0,0,157.819,0V142.181A78.91,78.91,0,0,0,170.034,63.271Zm34.058,281.614a34.151,34.151,0,1,1-68.3,0V142.136a34.151,34.151,0,0,1,68.3,0Z" transform="translate(131.919 56.272)" fill="#161615"/><path d="M204.092,169.919a34.151,34.151,0,0,1-68.3,0v-.171H91.124a78.91,78.91,0,0,0,157.819,0H204.092Z" transform="translate(131.919 345)" fill="#161615"/><path d="M149.6,124.877a34.136,34.136,0,0,1,29.552-17.018l-.093-44.588a78.769,78.769,0,0,0-62.163,30.3Z" transform="translate(201.804 56.272)" fill="#161615"/><path d="M167.132,200.448C124.37,201.97,91.1,238.411,91.1,281.2V479.95c0,42.784,33.271,79.229,76.033,80.747a78.91,78.91,0,0,0,81.786-78.858V437.122H204.067v43.723c0,18.187-13.726,34.069-31.879,35.246a34.156,34.156,0,0,1-36.422-34.077V428.351l95.285-47.639a32.326,32.326,0,0,0,17.868-28.91v-72.5A78.91,78.91,0,0,0,167.132,200.448ZM135.765,383.637V280.431c0-18.187,13.726-34.069,31.879-35.246a34.154,34.154,0,0,1,36.422,34.077v61.769a13.694,13.694,0,0,1-7.568,12.241Z" transform="translate(131.851 428.11)" fill="#161615"/><g transform="translate(402.995 514.748)"><path d="M169.155,231.354a34.138,34.138,0,0,0-29.548-17.022l.093-44.584a78.764,78.764,0,0,1,62.163,30.3Z" transform="translate(-139.607 -169.748)" fill="#161615"/><path d="M218.562,169.748a78.907,78.907,0,0,0-78.91,78.906v395.29h44.866V523.4a78.766,78.766,0,0,0,112.953-71.1V248.654A78.909,78.909,0,0,0,218.562,169.748Zm34.054,282.72a34.146,34.146,0,0,1-68.1,3.637V343.884h-.2V248.609a34.149,34.149,0,0,1,68.3,0Z" transform="translate(-139.485 -169.748)" fill="#161615"/></g><path d="M264.264,200.448c-42.758,1.522-76.033,37.963-76.033,80.751V479.95c0,42.784,33.275,79.229,76.033,80.747A78.91,78.91,0,0,0,346.05,481.84V437.122H301.2v43.723c0,18.187-13.726,34.069-31.876,35.246A34.154,34.154,0,0,1,232.9,482.014V428.351l95.282-47.639A32.326,32.326,0,0,0,346.05,351.8v-72.5A78.91,78.91,0,0,0,264.264,200.448ZM232.9,383.637V280.431c0-18.187,13.726-34.069,31.876-35.246A34.154,34.154,0,0,1,301.2,279.262v61.769a13.687,13.687,0,0,1-7.568,12.241Z" transform="translate(395.239 428.11)" fill="#161615"/><path d="M248.933,425.275a34.148,34.148,0,0,1-58.325-24.118V164.194h58.136V119.528H190.608V42.519H145.942V400.986A78.9,78.9,0,0,0,280.6,456.824Z" transform="translate(280.566)" fill="#161615"/><rect width="48.288" height="44.667" transform="translate(403.351 119.543)" fill="#161615"/></g></g></svg></a>
+
+  <hr class="side-rule">
+
+  <!-- nav verticale: solo mobile, dentro il menù a scomparsa -->
+  <nav class="drawer-nav">
+    <a class="nav-link" href="index.html">home</a>
+    <a class="nav-link" href="index.html#chi-sono">chi sono</a>
+    <a class="nav-link active" href="cosa-faccio.html">cosa faccio</a>
+    <a class="nav-link" href="esperienza.html">esperienza</a>
+    <a class="nav-link" href="portfolio.html">portfolio</a>
+  </nav>
+
+  <div class="identity">
+    <div class="name">Denis Sentimenti</div>
+    <div class="role">senior art director</div>
+    <div class="role">head of design</div>
+    <div class="role">@flushdesign</div>
+  </div>
+
+  <div class="contacts">
+    <a href="tel:+393807137922">+39 3807137922</a>
+    <a href="mailto:sergente.pepe@icloud.com">sergente.pepe@icloud.com</a>
+  </div>
+
+  <hr class="side-rule">
+
+  <div class="side-spacer"></div>
+
+  <div class="side-foot">©2026 SgtPepe - all rights reserved</div>
+</aside>
+
+<!-- compare al primo scroll: voci di menù in orizzontale + logo flush -->
+<header class="topbar show" id="topbar">
+  <div class="tb-inner">
+    <div class="tb-navwrap">
+      <nav class="topnav">
+        <a class="nav-link" href="index.html">home</a>
+        <a class="nav-link" href="index.html#chi-sono">chi sono</a>
+        <a class="nav-link active" href="cosa-faccio.html">cosa faccio</a>
+        <a class="nav-link" href="esperienza.html">esperienza</a>
+        <a class="nav-link" href="portfolio.html">portfolio</a>
+      </nav>
+    </div>
+  </div>
+  <!-- segnaposto: da sostituire con l'SVG del logo flush -->
+  <a class="flush" href="https://www.flushdesign.it" target="_blank" rel="noopener">flush.</a>
+</header>
+
+<div class="mobile-bar">
+  <a class="m-logo" href="index.html" aria-label="Sgt. Pepe — home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 725 973"><g><g transform="translate(-29.475 -29.52)"><path d="M267.191,148.232a78.91,78.91,0,1,0,78.91,78.91A78.91,78.91,0,0,0,267.191,148.232Zm34.058,78.91v.171a34.149,34.149,0,1,1-68.3,0v-.171h.186v-.174a34.149,34.149,0,0,1,68.3,0v.174Z" transform="translate(395.375 286.657)" fill="#ffcf00"/><path d="M101.8,203.712a34.176,34.176,0,0,1-14.524-27.949l.093-33.583v-.174a34.149,34.149,0,0,1,68.3,0v.174l-.048,33.743h44.714V142.181a78.908,78.908,0,1,0-157.816,0v33.583a78.967,78.967,0,0,0,33.624,64.62l64.909,42.8a34.181,34.181,0,0,1,14.524,27.949l-.093,33.587v.171a34.149,34.149,0,1,1-68.3,0v-.171l.048-44.722H42.52v44.722a78.908,78.908,0,1,0,157.816,0V311.128a78.972,78.972,0,0,0-33.624-64.62Z" transform="translate(0.122 56.272)" fill="#161615"/><g transform="translate(42.475 514.748)"><path d="M72.023,231.354a34.138,34.138,0,0,0-29.548-17.022l.093-44.584a78.769,78.769,0,0,1,62.163,30.3Z" transform="translate(-42.475 -169.748)" fill="#161615"/><path d="M121.426,169.748A78.906,78.906,0,0,0,42.52,248.654v395.29H87.383V523.4a78.766,78.766,0,0,0,112.953-71.1V248.654A78.907,78.907,0,0,0,121.426,169.748Zm34.058,282.72a34.148,34.148,0,0,1-68.1,3.637V343.884h-.2V248.609a34.149,34.149,0,0,1,68.3,0Z" transform="translate(-42.353 -169.748)" fill="#161615"/></g><path d="M170.034,63.271a78.908,78.908,0,0,0-78.91,78.91V344.714a78.91,78.91,0,0,0,157.819,0V142.181A78.91,78.91,0,0,0,170.034,63.271Zm34.058,281.614a34.151,34.151,0,1,1-68.3,0V142.136a34.151,34.151,0,0,1,68.3,0Z" transform="translate(131.919 56.272)" fill="#161615"/><path d="M204.092,169.919a34.151,34.151,0,0,1-68.3,0v-.171H91.124a78.91,78.91,0,0,0,157.819,0H204.092Z" transform="translate(131.919 345)" fill="#161615"/><path d="M149.6,124.877a34.136,34.136,0,0,1,29.552-17.018l-.093-44.588a78.769,78.769,0,0,0-62.163,30.3Z" transform="translate(201.804 56.272)" fill="#161615"/><path d="M167.132,200.448C124.37,201.97,91.1,238.411,91.1,281.2V479.95c0,42.784,33.271,79.229,76.033,80.747a78.91,78.91,0,0,0,81.786-78.858V437.122H204.067v43.723c0,18.187-13.726,34.069-31.879,35.246a34.156,34.156,0,0,1-36.422-34.077V428.351l95.285-47.639a32.326,32.326,0,0,0,17.868-28.91v-72.5A78.91,78.91,0,0,0,167.132,200.448ZM135.765,383.637V280.431c0-18.187,13.726-34.069,31.879-35.246a34.154,34.154,0,0,1,36.422,34.077v61.769a13.694,13.694,0,0,1-7.568,12.241Z" transform="translate(131.851 428.11)" fill="#161615"/><g transform="translate(402.995 514.748)"><path d="M169.155,231.354a34.138,34.138,0,0,0-29.548-17.022l.093-44.584a78.764,78.764,0,0,1,62.163,30.3Z" transform="translate(-139.607 -169.748)" fill="#161615"/><path d="M218.562,169.748a78.907,78.907,0,0,0-78.91,78.906v395.29h44.866V523.4a78.766,78.766,0,0,0,112.953-71.1V248.654A78.909,78.909,0,0,0,218.562,169.748Zm34.054,282.72a34.146,34.146,0,0,1-68.1,3.637V343.884h-.2V248.609a34.149,34.149,0,0,1,68.3,0Z" transform="translate(-139.485 -169.748)" fill="#161615"/></g><path d="M264.264,200.448c-42.758,1.522-76.033,37.963-76.033,80.751V479.95c0,42.784,33.275,79.229,76.033,80.747A78.91,78.91,0,0,0,346.05,481.84V437.122H301.2v43.723c0,18.187-13.726,34.069-31.876,35.246A34.154,34.154,0,0,1,232.9,482.014V428.351l95.282-47.639A32.326,32.326,0,0,0,346.05,351.8v-72.5A78.91,78.91,0,0,0,264.264,200.448ZM232.9,383.637V280.431c0-18.187,13.726-34.069,31.876-35.246A34.154,34.154,0,0,1,301.2,279.262v61.769a13.687,13.687,0,0,1-7.568,12.241Z" transform="translate(395.239 428.11)" fill="#161615"/><path d="M248.933,425.275a34.148,34.148,0,0,1-58.325-24.118V164.194h58.136V119.528H190.608V42.519H145.942V400.986A78.9,78.9,0,0,0,280.6,456.824Z" transform="translate(280.566)" fill="#161615"/><rect width="48.288" height="44.667" transform="translate(403.351 119.543)" fill="#161615"/></g></g></svg></a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Apri il menu" aria-expanded="false" aria-controls="sidebar">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+
+<main class="content" id="top">
+  <div class="wrap">
+
+    <section id="cosa-faccio">
+      <div data-spin="semi45" class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M397.779,269.247A158.2,158.2,0,0,0,621.506,492.975L766.814,638.283c-142.024,142.041-372.3,142.041-514.344,0-142.024-142.024-142.024-372.3,0-514.344Z" transform="translate(-78.848 -54.377)" fill="currentColor"/></g></svg></div>
+      <h2 class="headline">Otto modi diversi<br>per dare forma a un'idea.</h2>
+      <p class="tag">° Sgt. Pepper's Lonely Hearts Club Band</p>
+      <hr>
+
+      <div class="service-list">
+        <div class="service-item"><span class="bullet">▶</span><div><h3>Art direction</h3><p>direzione artistica e creativa; ricerca, gestione e coordinamento del team di lavoro.</p></div></div>
+        <div class="service-item"><span class="bullet">▶</span><div><h3>Pubblicità</h3><p>progetto di campagne di advertising, ATL, BTL e punti di vista.</p></div></div>
+        <div class="service-item"><span class="bullet">▶</span><div><h3>Brand e Identity</h3><p>progettazione e rinnovo del marchio; consulenza e gestione dell'identità aziendale; modulistica di base; strategie di comunicazione e marketing.</p></div></div>
+        <div class="service-item"><span class="bullet">▶</span><div><h3>Servizi per l'editoria classica</h3><p>linee guida per il sistema di identità di collane editoriali, riviste, house-organ, manuali, opuscoli tecnici, libretti d'istruzione; impaginazioni esecutive.</p></div></div>
+        <div class="service-item"><span class="bullet">▶</span><div><h3>Ambienti</h3><p>branding e identità per ambienti permanenti o singoli eventi; segnaletica; ambient marketing.</p></div></div>
+        <div class="service-item"><span class="bullet">▶</span><div><h3>Illustrazione, Photoediting e 3D</h3><p>illustrazione 3d e a mano libera; ideazione e modellazione di characters e prodotti; postproduzione fotografica avanzata per campagne pubblicitarie.</p></div></div>
+        <div class="service-item"><span class="bullet">▶</span><div><h3>Linee di prodotto</h3><p>progetto del packaging e del sistema di identità; adattamento dei contenitori ad altri prodotti.</p></div></div>
+        <div class="service-item"><span class="bullet">▶</span><div><h3>Multimedia</h3><p>progettazione grafica di siti web; progettazione e impaginazione esecutiva di brochure digitali interattive.</p></div></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+  var sidebar = document.getElementById('sidebar');
+  var topbar  = document.getElementById('topbar');
+
+  // primo scroll: il logo si riduce in testa ed escono in orizzontale
+  // le voci del menù e il logo flush
+  var SCROLL_AT = 60;
+  // nelle pagine interne la barra in testa c'è già all'apertura: senza,
+  // non ci sarebbe modo di navigare senza prima scorrere la pagina
+  var SEMPRE_IN_TESTA = true;
+  function onScroll(){
+    var scrolled = SEMPRE_IN_TESTA || window.scrollY > SCROLL_AT;
+    sidebar.classList.toggle('scrolled', scrolled);
+    topbar.classList.toggle('show', scrolled);
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  // ---- schede progetto: apertura/chiusura ----
+  var overlay = document.getElementById('overlay');
+  var overlayClose = document.getElementById('overlayClose');
+  var lastFocused = null;
+
+  function openProject(key){
+    var panel = overlay.querySelector('.pd[data-pd="' + key + '"]');
+    if(!panel){ return; }
+    overlay.querySelectorAll('.pd').forEach(function(p){ p.classList.remove('active'); });
+    panel.classList.add('active');
+
+    // la galleria parte dall'immagine della card, senza duplicare i dati nel file
+    var gallery = panel.querySelector('.pd-gallery');
+    var thumb = document.querySelector('.work-open[data-pd="' + key + '"] img');
+    if(gallery && thumb && !gallery.querySelector('img[data-from-card]')){
+      var img = document.createElement('img');
+      img.src = thumb.src;
+      img.alt = thumb.alt;
+      img.setAttribute('data-from-card','');
+      gallery.insertBefore(img, gallery.firstChild);
+    }
+
+    lastFocused = document.activeElement;
+    overlay.hidden = false;
+    document.body.classList.add('locked');
+    requestAnimationFrame(function(){ overlay.classList.add('show'); });
+    overlay.scrollTop = 0;
+    overlayClose.focus();
+  }
+
+  function closeProject(){
+    overlay.classList.remove('show');
+    document.body.classList.remove('locked');
+    setTimeout(function(){ overlay.hidden = true; }, 280);
+    if(lastFocused){ lastFocused.focus(); }
+  }
+
+  document.querySelectorAll('.work-open').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      openProject(a.getAttribute('data-pd'));
+    });
+  });
+  if(overlay && overlayClose){
+    overlayClose.addEventListener('click', closeProject);
+    overlay.querySelectorAll('[data-close]').forEach(function(b){
+      b.addEventListener('click', function(e){ e.preventDefault(); closeProject(); });
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && !overlay.hidden){ closeProject(); }
+    });
+  }
+
+  // menù mobile a scomparsa
+  var toggle = document.getElementById('menuToggle');
+  var scrim  = document.getElementById('scrim');
+  function closeMenu(){
+    sidebar.classList.remove('open');
+    scrim.classList.remove('show');
+    toggle.setAttribute('aria-expanded','false');
+  }
+  toggle.addEventListener('click', function(){
+    var open = sidebar.classList.toggle('open');
+    scrim.classList.toggle('show', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  scrim.addEventListener('click', closeMenu);
+
+  // il testo compare dall'alto verso il basso quando entra nel viewport
+  var reveals = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var revObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); revObs.unobserve(e.target); }
+      });
+    }, { rootMargin:'0px 0px -12% 0px' });
+    reveals.forEach(function(el){ revObs.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // la voce di menù attiva è scritta nel markup di ogni pagina;
+  // qui resta solo la chiusura del menù mobile quando si naviga
+  Array.prototype.slice.call(document.querySelectorAll('.nav-link'))
+    .forEach(function(a){ a.addEventListener('click', closeMenu); });
+  // ---- filtro del portfolio per tag ----
+  // I bottoni nascono dai tag presenti nelle schede: aggiungendo un progetto
+  // con un tag nuovo, il filtro si aggiorna da solo.
+  var griglia = document.querySelector('.work-grid');
+  var barraFiltri = document.getElementById('filtri');
+  if(griglia && barraFiltri){
+    var schede = Array.prototype.slice.call(griglia.querySelectorAll('.work'));
+    var conteggio = {};
+    schede.forEach(function(scheda){
+      var tag = Array.prototype.slice.call(scheda.querySelectorAll('.tags span'))
+        .map(function(s){ return s.textContent.trim(); });
+      scheda.__tag = tag;
+      tag.forEach(function(t){ conteggio[t] = (conteggio[t] || 0) + 1; });
+    });
+
+    var etichette = Object.keys(conteggio).sort(function(a, b){
+      return conteggio[b] - conteggio[a] || a.localeCompare(b);
+    });
+
+    function applicaFiltro(valore){
+      Array.prototype.forEach.call(barraFiltri.children, function(b){
+        b.setAttribute('aria-pressed', b.__valore === valore ? 'true' : 'false');
+      });
+      schede.forEach(function(scheda){
+        var mostra = (valore === null) || scheda.__tag.indexOf(valore) !== -1;
+        scheda.hidden = !mostra;
+        if(mostra){ scheda.style.animation = 'none'; void scheda.offsetWidth; scheda.style.animation = ''; }
+      });
+    }
+
+    function creaBottone(testo, valore, quanti, attivo){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = testo;
+      if(quanti){
+        var n = document.createElement('span');
+        n.className = 'conteggio';
+        n.textContent = quanti;
+        b.appendChild(n);
+      }
+      b.__valore = valore;
+      b.setAttribute('aria-pressed', attivo ? 'true' : 'false');
+      b.addEventListener('click', function(){ applicaFiltro(valore); });
+      barraFiltri.appendChild(b);
+    }
+
+    creaBottone('tutti', null, schede.length, true);
+    etichette.forEach(function(e){ creaBottone(e, e, conteggio[e], false); });
+  }
+
+  // ---- i pittogrammi ruotano allo scroll ----
+  // L'angolo è legato alla posizione di scroll: le forme girano come ingranaggi
+  // agganciati alla pagina. Le schede progetto seguono lo scroll del proprio
+  // pannello. Per cambiare velocità, agire su GRADI_PER_PIXEL.
+  var GRADI_PER_PIXEL = 0.2;   // un giro completo ogni 1800 px di scroll
+  var riduciMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pittogrammi = Array.prototype.slice.call(document.querySelectorAll('.mark svg'))
+    .map(function(svg){
+      return { el: svg, nelPannello: !!(svg.closest && svg.closest('.overlay')) };
+    });
+  var spinInCoda = false;
+
+  function ruotaPittogrammi(){
+    spinInCoda = false;
+    var yPagina = window.scrollY;
+    var yPannello = (overlay && !overlay.hidden) ? overlay.scrollTop : 0;
+    for(var i = 0; i < pittogrammi.length; i++){
+      var p = pittogrammi[i];
+      var y = p.nelPannello ? yPannello : yPagina;
+      p.el.style.transform = 'rotate(' + (y * GRADI_PER_PIXEL).toFixed(2) + 'deg)';
+    }
+  }
+
+  function chiediRotazione(){
+    if(riduciMovimento || spinInCoda){ return; }
+    spinInCoda = true;
+    requestAnimationFrame(ruotaPittogrammi);
+  }
+
+  window.addEventListener('scroll', chiediRotazione, { passive:true });
+  if(overlay){ overlay.addEventListener('scroll', chiediRotazione, { passive:true }); }
+  chiediRotazione();
+
+</script>
+
+</body>
