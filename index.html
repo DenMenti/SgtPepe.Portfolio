@@ -208,6 +208,21 @@
   .service-item h3{ font-size:15px; line-height:26px; font-weight:600; }
   .service-item p{ margin:0; }
 
+  /* ---------- filtro del portfolio per tag ---------- */
+  .filtri{ display:flex; flex-wrap:wrap; gap:7px; margin-top:30px; }
+  .filtri button{
+    font:inherit; font-size:12px; line-height:20px;
+    background:none; border:1px solid var(--line); border-radius:3px;
+    padding:3px 10px; color:var(--gray-mid); cursor:pointer;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .filtri button:hover{ color:var(--black); border-color:var(--gray); }
+  .filtri button[aria-pressed="true"]{ background:var(--black); border-color:var(--black); color:#fff; }
+  .filtri .conteggio{ opacity:.5; margin-left:.45em; }
+  .work[hidden]{ display:none; }
+  .work-grid .work{ animation:comparsa .28s ease both; }
+  @keyframes comparsa{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+
   /* ---------- portfolio ---------- */
   .work-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:34px 24px; margin-top:34px; }
   .work-frame{ aspect-ratio:4/3; overflow:hidden; background:#f2f2f0; }
@@ -504,6 +519,8 @@
       <p class="tag">° portfolio</p>
       <hr>
 
+      <div class="filtri" id="filtri" role="group" aria-label="Filtra i lavori per tag"></div>
+
       <div class="work-grid">
 
         <article class="work">
@@ -778,6 +795,56 @@
       if(window.scrollY < 120){ setActive('#top'); }
     }, { passive:true });
   }
+  // ---- filtro del portfolio per tag ----
+  // I bottoni nascono dai tag presenti nelle schede: aggiungendo un progetto
+  // con un tag nuovo, il filtro si aggiorna da solo.
+  var griglia = document.querySelector('.work-grid');
+  var barraFiltri = document.getElementById('filtri');
+  if(griglia && barraFiltri){
+    var schede = Array.prototype.slice.call(griglia.querySelectorAll('.work'));
+    var conteggio = {};
+    schede.forEach(function(scheda){
+      var tag = Array.prototype.slice.call(scheda.querySelectorAll('.tags span'))
+        .map(function(s){ return s.textContent.trim(); });
+      scheda.__tag = tag;
+      tag.forEach(function(t){ conteggio[t] = (conteggio[t] || 0) + 1; });
+    });
+
+    var etichette = Object.keys(conteggio).sort(function(a, b){
+      return conteggio[b] - conteggio[a] || a.localeCompare(b);
+    });
+
+    function applicaFiltro(valore){
+      Array.prototype.forEach.call(barraFiltri.children, function(b){
+        b.setAttribute('aria-pressed', b.__valore === valore ? 'true' : 'false');
+      });
+      schede.forEach(function(scheda){
+        var mostra = (valore === null) || scheda.__tag.indexOf(valore) !== -1;
+        scheda.hidden = !mostra;
+        if(mostra){ scheda.style.animation = 'none'; void scheda.offsetWidth; scheda.style.animation = ''; }
+      });
+    }
+
+    function creaBottone(testo, valore, quanti, attivo){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = testo;
+      if(quanti){
+        var n = document.createElement('span');
+        n.className = 'conteggio';
+        n.textContent = quanti;
+        b.appendChild(n);
+      }
+      b.__valore = valore;
+      b.setAttribute('aria-pressed', attivo ? 'true' : 'false');
+      b.addEventListener('click', function(){ applicaFiltro(valore); });
+      barraFiltri.appendChild(b);
+    }
+
+    creaBottone('tutti', null, schede.length, true);
+    etichette.forEach(function(e){ creaBottone(e, e, conteggio[e], false); });
+  }
+
   // ---- i pittogrammi ruotano allo scroll ----
   // L'angolo è legato alla posizione di scroll: le forme girano come ingranaggi
   // agganciati alla pagina. Le schede progetto seguono lo scroll del proprio
