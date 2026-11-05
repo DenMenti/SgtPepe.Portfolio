@@ -132,6 +132,14 @@
   .mark svg{ width:100%; height:100%; display:block; }
   .mark.yellow{ color:var(--yellow); }
 
+  /* I pittogrammi ruotano allo scroll attorno al centro della circonferenza
+     implicita, non al centro del proprio riquadro: per il semicerchio quel
+     centro cade sul bordo piatto, per quello a 45 gradi è fuori asse. */
+  .mark svg{ transform-origin:50% 50%; will-change:transform; }
+  .mark[data-spin="semi"] svg{ transform-origin:50% 26.07%; }
+  .mark[data-spin="semi45"] svg{ transform-origin:57.14% 42.99%; }
+  @media (prefers-reduced-motion: reduce){ .mark svg{ transform:none !important; } }
+
   .headline{
     margin-top:63px;
     font-size:32px; line-height:47px; letter-spacing:-.01em;
@@ -383,7 +391,7 @@
   <div class="wrap">
 
     <section class="hero">
-      <div class="mark yellow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M406.18,63.142c-200.872,0-363.7,162.826-363.7,363.7,0,200.855,162.826,363.681,363.7,363.681,200.855,0,363.7-162.826,363.7-363.681C769.878,225.968,607.035,63.142,406.18,63.142Zm0,521.888a158.2,158.2,0,1,1,158.19-158.19A158.189,158.189,0,0,1,406.18,585.03Z" transform="translate(-29.18 -46.832)" fill="currentColor"/></g></svg></div>
+      <div data-spin="ring" class="mark yellow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M406.18,63.142c-200.872,0-363.7,162.826-363.7,363.7,0,200.855,162.826,363.681,363.7,363.681,200.855,0,363.7-162.826,363.7-363.681C769.878,225.968,607.035,63.142,406.18,63.142Zm0,521.888a158.2,158.2,0,1,1,158.19-158.19A158.189,158.189,0,0,1,406.18,585.03Z" transform="translate(-29.18 -46.832)" fill="currentColor"/></g></svg></div>
 
       <!-- ↓↓↓ PAYOFF: sostituisci queste 4 righe con il testo del tuo mockup ↓↓↓ -->
       <h1 class="headline">Un mestiere nato per caso,<br>portato avanti per passione:<br>comunicazione visiva<br>dal 1999.</h1>
@@ -430,7 +438,7 @@
     </section>
 
     <section id="esperienza">
-      <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M296.651,169.479a158.19,158.19,0,0,0,316.38,0H818.54c0,200.872-162.843,363.7-363.7,363.7-200.872,0-363.7-162.826-363.7-363.7Z" transform="translate(-77.842 28.672)" fill="currentColor"/></g></svg></div>
+      <div data-spin="semi" class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M296.651,169.479a158.19,158.19,0,0,0,316.38,0H818.54c0,200.872-162.843,363.7-363.7,363.7-200.872,0-363.7-162.826-363.7-363.7Z" transform="translate(-77.842 28.672)" fill="currentColor"/></g></svg></div>
       <h2 class="headline">Vent'anni di squadre, marchi<br>e progetti — tra agenzia<br>e libera professione.</h2>
       <p class="tag">° In My Life</p>
       <hr>
@@ -458,7 +466,7 @@
     </section>
 
     <section id="cosa-faccio">
-      <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M397.779,269.247A158.2,158.2,0,0,0,621.506,492.975L766.814,638.283c-142.024,142.041-372.3,142.041-514.344,0-142.024-142.024-142.024-372.3,0-514.344Z" transform="translate(-78.848 -54.377)" fill="currentColor"/></g></svg></div>
+      <div data-spin="semi45" class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M397.779,269.247A158.2,158.2,0,0,0,621.506,492.975L766.814,638.283c-142.024,142.041-372.3,142.041-514.344,0-142.024-142.024-142.024-372.3,0-514.344Z" transform="translate(-78.848 -54.377)" fill="currentColor"/></g></svg></div>
       <h2 class="headline">Otto modi diversi<br>per dare forma a un'idea.</h2>
       <p class="tag">° Sgt. Pepper's Lonely Hearts Club Band</p>
       <hr>
@@ -476,7 +484,7 @@
     </section>
 
     <section id="portfolio">
-      <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M406.18,63.142c-200.872,0-363.7,162.826-363.7,363.7,0,200.855,162.826,363.681,363.7,363.681,200.855,0,363.7-162.826,363.7-363.681C769.878,225.968,607.035,63.142,406.18,63.142Zm0,521.888a158.2,158.2,0,1,1,158.19-158.19A158.189,158.189,0,0,1,406.18,585.03Z" transform="translate(-29.18 -46.832)" fill="currentColor"/></g></svg></div>
+      <div data-spin="ring" class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M406.18,63.142c-200.872,0-363.7,162.826-363.7,363.7,0,200.855,162.826,363.681,363.7,363.681,200.855,0,363.7-162.826,363.7-363.681C769.878,225.968,607.035,63.142,406.18,63.142Zm0,521.888a158.2,158.2,0,1,1,158.19-158.19A158.189,158.189,0,0,1,406.18,585.03Z" transform="translate(-29.18 -46.832)" fill="currentColor"/></g></svg></div>
       <h2 class="headline">Progetti, clienti<br>e cose stampate.</h2>
       <p class="tag">° portfolio</p>
       <hr>
@@ -534,7 +542,7 @@
   <div class="pd-wrap">
       <article class="pd" id="pd-cantine" data-pd="cantine">
       <a class="pd-back" href="#portfolio" data-close>← portfolio</a>
-      <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M296.651,169.479a158.19,158.19,0,0,0,316.38,0H818.54c0,200.872-162.843,363.7-363.7,363.7-200.872,0-363.7-162.826-363.7-363.7Z" transform="translate(-77.842 28.672)" fill="currentColor"/></g></svg></div>
+      <div data-spin="semi" class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M296.651,169.479a158.19,158.19,0,0,0,316.38,0H818.54c0,200.872-162.843,363.7-363.7,363.7-200.872,0-363.7-162.826-363.7-363.7Z" transform="translate(-77.842 28.672)" fill="currentColor"/></g></svg></div>
       <h2>cantine in villa</h2>
       <dl class="pd-props">
         <div class="pd-prop"><dt>cliente</dt><dd>Villa Rosa</dd></div>
@@ -562,7 +570,7 @@
     </article>
       <article class="pd" id="pd-mech" data-pd="mech">
       <a class="pd-back" href="#portfolio" data-close>← portfolio</a>
-      <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M296.651,169.479a158.19,158.19,0,0,0,316.38,0H818.54c0,200.872-162.843,363.7-363.7,363.7-200.872,0-363.7-162.826-363.7-363.7Z" transform="translate(-77.842 28.672)" fill="currentColor"/></g></svg></div>
+      <div data-spin="semi" class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M296.651,169.479a158.19,158.19,0,0,0,316.38,0H818.54c0,200.872-162.843,363.7-363.7,363.7-200.872,0-363.7-162.826-363.7-363.7Z" transform="translate(-77.842 28.672)" fill="currentColor"/></g></svg></div>
       <h2>format brochure di prodotto</h2>
       <dl class="pd-props">
         <div class="pd-prop"><dt>cliente</dt><dd>Mitsubishi Electric Climatizzazione</dd></div>
@@ -588,7 +596,7 @@
     </article>
       <article class="pd" id="pd-guida" data-pd="guida">
       <a class="pd-back" href="#portfolio" data-close>← portfolio</a>
-      <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M296.651,169.479a158.19,158.19,0,0,0,316.38,0H818.54c0,200.872-162.843,363.7-363.7,363.7-200.872,0-363.7-162.826-363.7-363.7Z" transform="translate(-77.842 28.672)" fill="currentColor"/></g></svg></div>
+      <div data-spin="semi" class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M296.651,169.479a158.19,158.19,0,0,0,316.38,0H818.54c0,200.872-162.843,363.7-363.7,363.7-200.872,0-363.7-162.826-363.7-363.7Z" transform="translate(-77.842 28.672)" fill="currentColor"/></g></svg></div>
       <h2>guida ai servizi</h2>
       <dl class="pd-props">
         <div class="pd-prop"><dt>cliente</dt><dd>confindustria emilia area centro</dd></div>
@@ -614,7 +622,7 @@
     </article>
       <article class="pd" id="pd-fare" data-pd="fare">
       <a class="pd-back" href="#portfolio" data-close>← portfolio</a>
-      <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M296.651,169.479a158.19,158.19,0,0,0,316.38,0H818.54c0,200.872-162.843,363.7-363.7,363.7-200.872,0-363.7-162.826-363.7-363.7Z" transform="translate(-77.842 28.672)" fill="currentColor"/></g></svg></div>
+      <div data-spin="semi" class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M296.651,169.479a158.19,158.19,0,0,0,316.38,0H818.54c0,200.872-162.843,363.7-363.7,363.7-200.872,0-363.7-162.826-363.7-363.7Z" transform="translate(-77.842 28.672)" fill="currentColor"/></g></svg></div>
       <h2>branding rivista fare</h2>
       <dl class="pd-props">
         <div class="pd-prop"><dt>cliente</dt><dd>confindustria emilia area centro</dd></div>
@@ -755,6 +763,39 @@
       if(window.scrollY < 120){ setActive('#top'); }
     }, { passive:true });
   }
+  // ---- i pittogrammi ruotano allo scroll ----
+  // L'angolo è legato alla posizione di scroll: le forme girano come ingranaggi
+  // agganciati alla pagina. Le schede progetto seguono lo scroll del proprio
+  // pannello. Per cambiare velocità, agire su GRADI_PER_PIXEL.
+  var GRADI_PER_PIXEL = 0.2;   // un giro completo ogni 1800 px di scroll
+  var riduciMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pittogrammi = Array.prototype.slice.call(document.querySelectorAll('.mark svg'))
+    .map(function(svg){
+      return { el: svg, nelPannello: !!(svg.closest && svg.closest('.overlay')) };
+    });
+  var spinInCoda = false;
+
+  function ruotaPittogrammi(){
+    spinInCoda = false;
+    var yPagina = window.scrollY;
+    var yPannello = (overlay && !overlay.hidden) ? overlay.scrollTop : 0;
+    for(var i = 0; i < pittogrammi.length; i++){
+      var p = pittogrammi[i];
+      var y = p.nelPannello ? yPannello : yPagina;
+      p.el.style.transform = 'rotate(' + (y * GRADI_PER_PIXEL).toFixed(2) + 'deg)';
+    }
+  }
+
+  function chiediRotazione(){
+    if(riduciMovimento || spinInCoda){ return; }
+    spinInCoda = true;
+    requestAnimationFrame(ruotaPittogrammi);
+  }
+
+  window.addEventListener('scroll', chiediRotazione, { passive:true });
+  if(overlay){ overlay.addEventListener('scroll', chiediRotazione, { passive:true }); }
+  chiediRotazione();
+
 </script>
 
 </body>
