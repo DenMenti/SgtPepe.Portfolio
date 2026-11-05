@@ -104,10 +104,25 @@
     position:fixed; top:0; left:0; right:0; height:108px; z-index:50;
     background:#fff;
     opacity:0; pointer-events:none;
-    transform:translateY(-14px);
-    transition:opacity .4s ease, transform .4s ease;
+    transition:opacity .25s ease;
   }
-  .topbar.show{ opacity:1; pointer-events:auto; transform:translateY(0); }
+  .topbar.show{ opacity:1; pointer-events:auto; }
+
+  /* il menù non scende dall'alto: si compone da sinistra verso destra,
+     una voce dopo l'altra, e il marchio flush arriva per ultimo */
+  .topnav a, .flush{
+    opacity:0; transform:translateX(-16px);
+    transition:opacity .4s ease, transform .45s cubic-bezier(.22,.61,.36,1);
+  }
+  .topbar.show .topnav a, .topbar.show .flush{ opacity:1; transform:translateX(0); }
+  .topbar.show .topnav a:nth-child(1){ transition-delay:.00s; }
+  .topbar.show .topnav a:nth-child(2){ transition-delay:.07s; }
+  .topbar.show .topnav a:nth-child(3){ transition-delay:.14s; }
+  .topbar.show .topnav a:nth-child(4){ transition-delay:.21s; }
+  .topbar.show .flush{ transition-delay:.30s; }
+  @media (prefers-reduced-motion: reduce){
+    .topnav a, .flush{ opacity:1; transform:none; transition:none; }
+  }
 
   /* stessa gabbia del contenuto, così la nav parte esattamente sul filo
      del bordo sinistro della colonna di testo */
@@ -119,7 +134,7 @@
   .topnav a.active{ color:var(--black); border-color:var(--black); }
 
   .flush{
-    position:absolute; right:47px; top:50%; transform:translateY(-50%);
+    position:absolute; right:47px; top:50%; margin-top:-11px;
     font-weight:700; font-size:22px; line-height:1; color:var(--black);
     letter-spacing:-.01em; white-space:nowrap;
   }
