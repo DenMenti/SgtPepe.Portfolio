@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Redazione — Sergente Pepe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#161615; --text:#2b2b2a; --gray:#8a8a86; --gray-mid:#55554f;
+    --yellow:#ffcf00; --line:#dcdcd8; --sfondo:#fff;
+    --sans:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--sfondo); color:var(--text);
+    font:15px/23px var(--sans); -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:900px; margin:0 auto; padding:56px 24px 120px; }
+
+  h1{ font-size:32px; line-height:40px; letter-spacing:-.01em; color:var(--black); margin:0; font-weight:600; }
+  .sottotitolo{ margin:14px 0 0; color:var(--gray); }
+  hr{ border:0; border-top:1px solid var(--line); margin:34px 0; }
+
+  h2{ font-size:15px; line-height:26px; font-weight:600; color:var(--black); margin:44px 0 16px; letter-spacing:.02em; }
+  h2:first-of-type{ margin-top:0; }
+
+  label{ display:block; margin-bottom:16px; }
+  label > span{ display:block; color:var(--gray); margin-bottom:5px; font-size:13px; }
+  input[type=text], input[type=number], textarea, select{
+    width:100%; font:15px/23px var(--sans); color:var(--text);
+    border:1px solid var(--line); border-radius:4px; padding:9px 11px; background:#fff;
+  }
+  input:focus, textarea:focus{ outline:2px solid var(--yellow); outline-offset:-1px; border-color:transparent; }
+  textarea{ resize:vertical; min-height:92px; }
+  .aiuto{ color:var(--gray); font-size:13px; line-height:20px; margin:5px 0 0; }
+  .coppia{ display:grid; grid-template-columns:1fr 1fr; gap:0 18px; }
+
+  .tagbox{ display:flex; flex-wrap:wrap; gap:7px; }
+  .tagbox label{ margin:0; }
+  .tagbox input{ position:absolute; opacity:0; pointer-events:none; }
+  .tagbox span{
+    display:inline-block; border:1px solid var(--line); border-radius:999px;
+    padding:4px 12px; font-size:13px; line-height:20px; cursor:pointer; user-select:none;
+  }
+  .tagbox input:checked + span{ background:var(--black); border-color:var(--black); color:#fff; }
+  .tagbox input:focus-visible + span{ outline:2px solid var(--yellow); outline-offset:2px; }
+
+  #zona{
+    border:1px dashed var(--line); border-radius:6px; padding:44px 20px; text-align:center;
+    color:var(--gray); cursor:pointer; transition:border-color .15s, background .15s;
+  }
+  #zona:hover, #zona.sopra{ border-color:var(--black); background:#fafaf8; color:var(--gray-mid); }
+  #zona strong{ color:var(--black); font-weight:600; }
+
+  #elenco{ list-style:none; margin:18px 0 0; padding:0; }
+  #elenco li{
+    display:flex; align-items:center; gap:14px; padding:10px 0;
+    border-top:1px solid var(--line); cursor:grab;
+  }
+  #elenco li:last-child{ border-bottom:1px solid var(--line); }
+  #elenco li.trascina{ opacity:.35; }
+  #elenco img{ width:84px; height:60px; object-fit:cover; background:#ebebeb; border-radius:3px; flex:none; }
+  .info{ flex:1; min-width:0; }
+  .info b{ display:block; color:var(--black); font-weight:500; font-size:14px;
+           overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .info small{ color:var(--gray); font-size:13px; }
+  .via{ flex:none; border:0; background:none; color:var(--gray); font-size:20px;
+        line-height:1; cursor:pointer; padding:4px 8px; }
+  .via:hover{ color:#b23; }
+  .maniglia{ flex:none; color:var(--line); font-size:16px; letter-spacing:-2px; }
+
+  .bottoni{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  button.azione{
+    font:500 14px/22px var(--sans); border:1px solid var(--black); background:var(--black);
+    color:#fff; border-radius:4px; padding:9px 18px; cursor:pointer;
+  }
+  button.azione.chiaro{ background:#fff; color:var(--black); }
+  button.azione:hover{ background:var(--gray-mid); border-color:var(--gray-mid); color:#fff; }
+  button.azione:disabled{ opacity:.35; cursor:not-allowed; }
+
+  .esito{ margin-top:30px; }
+  .riquadro{ border:1px solid var(--line); border-radius:6px; padding:18px; margin-bottom:18px; }
+  .riquadro h3{ margin:0 0 4px; font-size:14px; line-height:22px; color:var(--black); font-weight:600; }
+  .riquadro p{ margin:0 0 12px; color:var(--gray); font-size:13px; line-height:20px; }
+  .riquadro textarea{ font:12px/18px ui-monospace,SFMono-Regular,Menlo,monospace; min-height:120px; }
+
+  ol.passi{ padding-left:20px; margin:0; }
+  ol.passi li{ margin-bottom:10px; }
+  code{ font:12px/18px ui-monospace,SFMono-Regular,Menlo,monospace;
+        background:#f4f4f1; padding:2px 5px; border-radius:3px; }
+  .peso{ color:var(--gray); font-size:13px; margin-top:12px; }
+  .peso b{ color:var(--black); font-weight:500; }
+  .avviso{ color:#9a6b00; }
+  .nascosto{ display:none; }
+
+  @media (max-width:640px){
+    .coppia{ grid-template-columns:1fr; }
+    .wrap{ padding:36px 16px 90px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Redazione</h1>
+  <p class="sottotitolo">Si compila una scheda, si trascinano le immagini, escono i due pezzi da caricare su GitHub.<br>Questa pagina non tocca niente da sola: produce file, li carichi tu.</p>
+
+  <hr>
+
+  <h2>il progetto</h2>
+
+  <div class="coppia">
+    <label><span>nome del lavoro</span><input type="text" id="nome" placeholder="cantine in villa"></label>
+    <label><span>indirizzo del file (si scrive da solo)</span><input type="text" id="slug" placeholder="cantine-in-villa"></label>
+  </div>
+
+  <div class="coppia">
+    <label><span>cliente</span><input type="text" id="cliente" placeholder="Villa Rosa"></label>
+    <div class="coppia">
+      <label><span>anno</span><input type="number" id="anno" placeholder="2024" min="1990" max="2100"></label>
+      <label><span>©</span>
+        <select id="credito">
+          <option>Sgt. Pepe</option>
+          <option>flushdesign</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <label><span>una riga sotto il titolo, nella griglia</span>
+    <input type="text" id="sommario" placeholder="identità per un'esperienza enogastronomica"></label>
+
+  <label><span>tag</span></label>
+  <div class="tagbox" id="tagbox"></div>
+  <p class="aiuto">Servono al filtro del portfolio. Per aggiungerne uno nuovo, scrivilo qui sotto.</p>
+  <label><input type="text" id="tagnuovo" placeholder="tag nuovo, separati da virgola"></label>
+
+  <h2>il briefing</h2>
+  <label><span>titolo del briefing</span>
+    <input type="text" id="titolo" placeholder="Villa Rosa – Identità per “Cantine in Villa”"></label>
+  <label><span>testo — una riga vuota separa un paragrafo dall'altro</span>
+    <textarea id="testo" rows="8" placeholder="Villa Rosa è una società di catering…"></textarea></label>
+  <label><span>attività — una per riga</span>
+    <textarea id="attivita" rows="5" placeholder="Art direction e coordinamento del team
+Studio e ideazione della brochure
+Produzione dei file esecutivi"></textarea></label>
+  <label><span>crediti — una per riga, nella forma <em>ruolo: nome</em> (facoltativo)</span>
+    <textarea id="team" rows="3" placeholder="Fotografia: Vanni Bergamini
+Stampa: La Pieve Poligrafica — Villa Verucchio (Rn)"></textarea></label>
+
+  <h2>le immagini</h2>
+  <div id="zona" tabindex="0" role="button" aria-label="Aggiungi immagini">
+    <strong>Trascina qui le immagini</strong><br>oppure fai clic per sceglierle
+  </div>
+  <input type="file" id="file" accept="image/*" multiple class="nascosto">
+  <ul id="elenco"></ul>
+  <p class="aiuto">La prima immagine diventa la copertina nella griglia. Si riordinano trascinandole.</p>
+  <p class="peso" id="peso"></p>
+
+  <hr>
+
+  <div class="bottoni">
+    <button class="azione" id="genera" disabled>Genera la scheda</button>
+    <button class="azione chiaro" id="pulisci">Ricomincia</button>
+  </div>
+
+  <div class="esito nascosto" id="esito">
+    <h2>da caricare su GitHub</h2>
+    <ol class="passi">
+      <li>Scarica i due pezzi qui sotto.</li>
+      <li>Vai su <code>github.com/DenMenti/SgtPepe.Portfolio</code> → <b>Add file</b> → <b>Upload files</b>, e trascina dentro <code>schede/<span class="nomefile">…</span>.html</code>. Scrivi <code>schede/</code> davanti al nome se non ci finisce da solo.</li>
+      <li>Apri <code>portfolio.html</code> con la matita, incolla il blocco della griglia subito dopo <code>&lt;div class="work-grid"&gt;</code> e il blocco della scheda subito dopo <code>&lt;div class="pd-wrap"&gt;</code>.</li>
+      <li>Fai lo stesso su <code>sorgente/index.html</code>, che è il file da cui si rigenerano le pagine.</li>
+    </ol>
+
+    <div class="riquadro">
+      <h3>1 — la galleria</h3>
+      <p>Va caricata come <code class="nomepercorso">schede/….html</code>. Contiene tutte le immagini.</p>
+      <div class="bottoni">
+        <button class="azione" data-scarica="galleria">Scarica il file</button>
+        <button class="azione chiaro" data-copia="galleria">Copia</button>
+      </div>
+    </div>
+
+    <div class="riquadro">
+      <h3>2 — il blocco della griglia</h3>
+      <p>La scheda che si vede nella griglia del portfolio, copertina compresa.</p>
+      <textarea id="outGriglia" rows="7" readonly></textarea>
+      <div class="bottoni" style="margin-top:12px;">
+        <button class="azione chiaro" data-copia="griglia">Copia</button>
+      </div>
+    </div>
+
+    <div class="riquadro">
+      <h3>3 — il blocco della finestra</h3>
+      <p>Il briefing che si apre al clic.</p>
+      <textarea id="outPannello" rows="9" readonly></textarea>
+      <div class="bottoni" style="margin-top:12px;">
+        <button class="azione chiaro" data-copia="pannello">Copia</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var TAG = ['ArtDirection','pubblicità','brand e identity','editoria classica','ambienti',
+             'illustrazione photoediting e 3D','linee di prodotto','multimedia','social media',
+             'consulenza','Learn'];
+
+  var MARK = '<div data-spin="semi" class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M296.651,169.479a158.19,158.19,0,0,0,316.38,0H818.54c0,200.872-162.843,363.7-363.7,363.7-200.872,0-363.7-162.826-363.7-363.7Z" transform="translate(-77.842 28.672)" fill="currentColor"/></g></svg></div>';
+
+  var LARG_GALLERIA = 1400, QUAL_GALLERIA = 0.82;
+  var LARG_COPERTINA = 1000, QUAL_COPERTINA = 0.80;
+
+  var el = function(id){ return document.getElementById(id); };
+  var immagini = [];          // { nome, grande, piccola, w, h }
+  var prodotti = {};
+
+  // ---------- tag ----------
+  TAG.forEach(function(t){
+    var l = document.createElement('label');
+    l.innerHTML = '<input type="checkbox" value="' + t + '"><span>' + t + '</span>';
+    el('tagbox').appendChild(l);
+  });
+
+  // ---------- slug ----------
+  function slugifica(s){
+    return s.toLowerCase().trim()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+  var slugToccato = false;
+  el('slug').addEventListener('input', function(){ slugToccato = true; });
+  el('nome').addEventListener('input', function(){
+    if (!slugToccato){ el('slug').value = slugifica(el('nome').value); }
+    aggiornaBottone();
+  });
+
+  // ---------- immagini ----------
+  function ridimensiona(img, maxW, qual){
+    var scala = Math.min(1, maxW / img.naturalWidth);
+    var w = Math.round(img.naturalWidth * scala);
+    var h = Math.round(img.naturalHeight * scala);
+    var cv = document.createElement('canvas');
+    cv.width = w; cv.height = h;
+    var cx = cv.getContext('2d');
+    cx.fillStyle = '#fff'; cx.fillRect(0, 0, w, h);
+    cx.drawImage(img, 0, 0, w, h);
+    return { dato: cv.toDataURL('image/jpeg', qual), w: w, h: h };
+  }
+
+  function leggi(file){
+    return new Promise(function(risolvi, rifiuta){
+      if (!/^image\//.test(file.type)){ rifiuta(new Error('non è un\'immagine')); return; }
+      var lettore = new FileReader();
+      lettore.onerror = function(){ rifiuta(new Error('non si legge')); };
+      lettore.onload = function(){
+        // le GIF animate si imbarcano intere: ridisegnarle le fermerebbe
+        if (file.type === 'image/gif'){
+          var tmp = new Image();
+          tmp.onload = function(){
+            risolvi({ nome:file.name, grande:lettore.result, piccola:lettore.result,
+                      w:tmp.naturalWidth, h:tmp.naturalHeight, gif:true });
+          };
+          tmp.onerror = function(){ rifiuta(new Error('GIF illeggibile')); };
+          tmp.src = lettore.result;
+          return;
+        }
+        var img = new Image();
+        img.onerror = function(){ rifiuta(new Error('immagine illeggibile')); };
+        img.onload = function(){
+          var g = ridimensiona(img, LARG_GALLERIA, QUAL_GALLERIA);
+          var p = ridimensiona(img, LARG_COPERTINA, QUAL_COPERTINA);
+          risolvi({ nome:file.name, grande:g.dato, piccola:p.dato, w:g.w, h:g.h });
+        };
+        img.src = lettore.result;
+      };
+      lettore.readAsDataURL(file);
+    });
+  }
+
+  function aggiungi(files){
+    var lista = [].slice.call(files);
+    var catena = Promise.resolve();
+    lista.forEach(function(f){
+      catena = catena.then(function(){
+        return leggi(f).then(function(i){ immagini.push(i); disegna(); })
+                       .catch(function(e){ console.warn(f.name, e.message); });
+      });
+    });
+    catena.then(aggiornaBottone);
+  }
+
+  function kb(s){ return Math.round(s.length * 0.75 / 1024); }
+
+  function disegna(){
+    var ul = el('elenco');
+    ul.innerHTML = '';
+    immagini.forEach(function(im, n){
+      var li = document.createElement('li');
+      li.draggable = true;
+      li.dataset.n = n;
+      li.innerHTML =
+        '<span class="maniglia">⋮⋮</span>' +
+        '<img src="' + im.piccola + '" alt="">' +
+        '<span class="info"><b>' + (n === 0 ? 'copertina — ' : '') + im.nome + '</b>' +
+        '<small>' + im.w + '×' + im.h + (im.gif ? ' · GIF animata' : '') + ' · ' + kb(im.grande) + ' kB</small></span>' +
+        '<button class="via" title="Togli" aria-label="Togli ' + im.nome + '">×</button>';
+      li.querySelector('.via').addEventListener('click', function(){
+        immagini.splice(n, 1); disegna(); aggiornaBottone();
+      });
+      ul.appendChild(li);
+    });
+    var tot = immagini.reduce(function(s, i){ return s + kb(i.grande); }, 0);
+    el('peso').innerHTML = immagini.length
+      ? 'La galleria peserà <b>' + tot + ' kB</b> in ' + immagini.length + ' immagini.' +
+        (tot > 1800 ? ' <span class="avviso">È parecchio: sopra il mega e mezzo la scheda si apre lenta.</span>' : '')
+      : '';
+  }
+
+  // riordino per trascinamento
+  var preso = null;
+  el('elenco').addEventListener('dragstart', function(e){
+    var li = e.target.closest('li'); if (!li) return;
+    preso = +li.dataset.n; li.classList.add('trascina');
+    e.dataTransfer.effectAllowed = 'move';
+    try { e.dataTransfer.setData('text/plain', String(preso)); } catch(x){}
+  });
+  el('elenco').addEventListener('dragend', function(e){
+    var li = e.target.closest('li'); if (li) li.classList.remove('trascina');
+    preso = null;
+  });
+  el('elenco').addEventListener('dragover', function(e){ e.preventDefault(); });
+  el('elenco').addEventListener('drop', function(e){
+    e.preventDefault(); e.stopPropagation();
+    var li = e.target.closest('li'); if (!li || preso === null) return;
+    var dove = +li.dataset.n;
+    if (dove === preso) return;
+    var spostata = immagini.splice(preso, 1)[0];
+    immagini.splice(dove, 0, spostata);
+    disegna();
+  });
+
+  var zona = el('zona');
+  ['dragenter','dragover'].forEach(function(ev){
+    zona.addEventListener(ev, function(e){ e.preventDefault(); zona.classList.add('sopra'); });
+  });
+  ['dragleave','drop'].forEach(function(ev){
+    zona.addEventListener(ev, function(){ zona.classList.remove('sopra'); });
+  });
+  zona.addEventListener('drop', function(e){
+    e.preventDefault();
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) aggiungi(e.dataTransfer.files);
+  });
+  zona.addEventListener('click', function(){ el('file').click(); });
+  zona.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); el('file').click(); }
+  });
+  el('file').addEventListener('change', function(){ aggiungi(this.files); this.value = ''; });
+  // fuori dalla zona il trascinamento non deve aprire il file nel browser
+  window.addEventListener('dragover', function(e){ e.preventDefault(); });
+  window.addEventListener('drop', function(e){ e.preventDefault(); });
+
+  // ---------- generazione ----------
+  function esc(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function raccogliTag(){
+    var t = [].slice.call(document.querySelectorAll('#tagbox input:checked')).map(function(i){ return i.value; });
+    el('tagnuovo').value.split(',').forEach(function(s){
+      s = s.trim(); if (s && t.indexOf(s) === -1) t.push(s);
+    });
+    return t;
+  }
+  function righe(id){
+    return el(id).value.split('\n').map(function(r){ return r.trim(); }).filter(Boolean);
+  }
+  function paragrafi(){
+    return el('testo').value.split(/\n\s*\n/).map(function(p){
+      return p.trim().replace(/\n/g, ' ');
+    }).filter(Boolean);
+  }
+
+  function aggiornaBottone(){
+    el('genera').disabled = !(el('nome').value.trim() && el('slug').value.trim() && immagini.length);
+  }
+  ['nome','slug','cliente'].forEach(function(id){
+    el(id).addEventListener('input', aggiornaBottone);
+  });
+
+  el('genera').addEventListener('click', function(){
+    var slug = slugifica(el('slug').value) || slugifica(el('nome').value);
+    var nome = el('nome').value.trim();
+    var cliente = el('cliente').value.trim() || '—';
+    var anno = el('anno').value.trim() || new Date().getFullYear();
+    var credito = el('credito').value;
+    var sommario = el('sommario').value.trim();
+    var tag = raccogliTag();
+    var didascalia = esc(nome + (cliente !== '—' ? ' — ' + cliente : ''));
+
+    // 1 — galleria
+    var galleria = immagini.map(function(im, n){
+      return '<img src="' + im.grande + '" alt="' + didascalia + ' — immagine ' + (n+1) +
+             '" loading="lazy" width="' + im.w + '" height="' + im.h + '">';
+    }).join('\n');
+
+    // 2 — blocco della griglia
+    var copertina = immagini[0];
+    var griglia =
+      '        <article class="work">\n' +
+      '          <a class="work-open" href="#pd-' + slug + '" data-pd="' + slug + '" aria-label="Apri il progetto: ' + esc(nome) + '">\n' +
+      '          <div class="work-frame"><img src="' + copertina.piccola + '" alt="' + didascalia + '" loading="lazy"></div>\n' +
+      '          <div class="work-meta"><span>' + esc(cliente) + '</span><span>' + esc(anno) + '</span></div>\n' +
+      '          <h3>' + esc(nome) + '</h3>\n' +
+      '          <div class="client">' + esc(sommario) + '</div>\n' +
+      '          </a>\n' +
+      '          <div class="tags">' + tag.map(function(t){ return '<span>' + esc(t) + '</span>'; }).join('') + '</div>\n' +
+      '        </article>';
+
+    // 3 — blocco della finestra
+    var crediti = righe('team').map(function(r){
+      var i = r.indexOf(':');
+      if (i < 0) return '<dt>' + esc(r) + '</dt><dd></dd>';
+      return '<dt>' + esc(r.slice(0, i).trim()) + '</dt><dd>' + esc(r.slice(i+1).trim()) + '</dd>';
+    }).join('');
+
+    var pannello =
+      '      <article class="pd" id="pd-' + slug + '" data-pd="' + slug + '">\n' +
+      '      <a class="pd-back" href="#portfolio" data-close>← portfolio</a>\n' +
+      '      ' + MARK + '\n' +
+      '      <h2>' + esc(nome) + '</h2>\n' +
+      '      <dl class="pd-props">\n' +
+      '        <div class="pd-prop"><dt>cliente</dt><dd>' + esc(cliente) + '</dd></div>\n' +
+      '        <div class="pd-prop"><dt>©</dt><dd>' + esc(credito) + '</dd></div>\n' +
+      '        <div class="pd-prop"><dt>anno</dt><dd>' + esc(anno) + '</dd></div>\n' +
+      '        <div class="pd-prop"><dt>key</dt><dd>' + tag.map(esc).join(' · ') + '</dd></div>\n' +
+      '      </dl>\n' +
+      '      <div class="pd-text">\n' +
+      (el('titolo').value.trim() ? '        <h3 class="pd-sub">il briefing</h3>\n' : '') +
+      paragrafi().map(function(p){ return '        <p>' + esc(p) + '</p>\n'; }).join('') +
+      (righe('attivita').length
+        ? '        <h3 class="pd-sub">attività</h3>\n        <ul class="pd-list">\n' +
+          righe('attivita').map(function(a){ return '          <li>' + esc(a) + '</li>\n'; }).join('') +
+          '        </ul>\n'
+        : '') +
+      (crediti ? '        <dl class="credits-list">' + crediti + '</dl>\n' : '') +
+      '      </div>\n' +
+      '      <div class="pd-gallery" data-scheda="' + slug + '"></div>\n' +
+      '    </article>';
+
+    prodotti = { slug: slug, galleria: galleria, griglia: griglia, pannello: pannello };
+    el('outGriglia').value = griglia;
+    el('outPannello').value = pannello;
+    [].forEach.call(document.querySelectorAll('.nomefile'), function(s){ s.textContent = slug; });
+    [].forEach.call(document.querySelectorAll('.nomepercorso'), function(s){ s.textContent = 'schede/' + slug + '.html'; });
+    el('esito').classList.remove('nascosto');
+    el('esito').scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+
+  function scarica(testo, nomeFile){
+    var b = new Blob([testo], { type:'text/html;charset=utf-8' });
+    var u = URL.createObjectURL(b);
+    var a = document.createElement('a');
+    a.href = u; a.download = nomeFile;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(u); }, 4000);
+  }
+
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('[data-scarica], [data-copia]');
+    if (!b || !prodotti.slug) return;
+    var quale = b.dataset.scarica || b.dataset.copia;
+    var testo = quale === 'galleria' ? prodotti.galleria
+              : quale === 'griglia'  ? prodotti.griglia
+              : prodotti.pannello;
+    if (b.dataset.scarica){
+      scarica(testo, prodotti.slug + '.html');
+    } else {
+      navigator.clipboard.writeText(testo).then(function(){
+        var prima = b.textContent; b.textContent = 'copiato';
+        setTimeout(function(){ b.textContent = prima; }, 1400);
+      }).catch(function(){
+        var ta = quale === 'griglia' ? el('outGriglia') : el('outPannello');
+        if (ta){ ta.select(); }
+      });
+    }
+  });
+
+  el('pulisci').addEventListener('click', function(){
+    if (!confirm('Si butta via tutto e si ricomincia?')) return;
+    immagini = []; prodotti = {}; slugToccato = false;
+    [].forEach.call(document.querySelectorAll('input[type=text], input[type=number], textarea'), function(i){ i.value = ''; });
+    [].forEach.call(document.querySelectorAll('#tagbox input'), function(i){ i.checked = false; });
+    disegna(); aggiornaBottone();
+    el('esito').classList.add('nascosto');
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+
+})();
+</script>
+</body>
+</html>
