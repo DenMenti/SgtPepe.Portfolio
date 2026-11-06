@@ -196,6 +196,28 @@
   .exp-brands .list,
   details.credits .credit-body p{ line-height:23px; }
 
+  /* titolo di sezione interno (esperienze, freelancing, mi occupo di…) */
+  .exp-titolo{
+    margin:52px 0 0; font-size:15px; line-height:26px; font-weight:600;
+    letter-spacing:.02em;
+  }
+  .exp-list + .exp-titolo{ margin-top:58px; }
+  .exp-titolo + .exp-list .exp-item:first-child{ margin-top:18px; }
+
+  /* strumenti: niente punteggi, solo tre fasce d'uso */
+  .tools{ margin-top:22px; }
+  .tool-band{ padding:18px 0; border-top:1px solid var(--line); }
+  .tool-band:last-child{ border-bottom:1px solid var(--line); }
+  .tool-level{ color:var(--gray); margin-bottom:10px; }
+  .tool-list{ display:flex; flex-wrap:wrap; gap:7px; }
+  .tool-list span{
+    border:1px solid var(--line); border-radius:999px;
+    padding:4px 12px; font-size:13px; line-height:20px; color:var(--text);
+  }
+
+  /* galleria caricata a richiesta */
+  .pd-caricamento{ color:var(--gray); font-size:14px; margin:0; }
+
   /* ---------- chi sono ---------- */
   .bio{ margin-top:63px; }
   .bio p{ margin:0 0 27px; }
@@ -437,10 +459,11 @@
 
     <section id="cosa-faccio">
       <div data-spin="semi45" class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 760"><g><path d="M397.779,269.247A158.2,158.2,0,0,0,621.506,492.975L766.814,638.283c-142.024,142.041-372.3,142.041-514.344,0-142.024-142.024-142.024-372.3,0-514.344Z" transform="translate(-78.848 -54.377)" fill="currentColor"/></g></svg></div>
-      <h2 class="headline">Otto modi diversi<br>per dare forma a un'idea.</h2>
+      <h2 class="headline">Dieci modi diversi<br>per dare forma a un'idea.</h2>
       <p class="tag">° Sgt. Pepper's Lonely Hearts Club Band</p>
       <hr>
 
+      <h3 class="exp-titolo">mi occupo di</h3>
       <div class="service-list">
         <div class="service-item"><span class="bullet">▶</span><div><h3>Art direction</h3><p>direzione artistica e creativa; ricerca, gestione e coordinamento del team di lavoro.</p></div></div>
         <div class="service-item"><span class="bullet">▶</span><div><h3>Pubblicità</h3><p>progetto di campagne di advertising, ATL, BTL e punti di vista.</p></div></div>
@@ -450,6 +473,24 @@
         <div class="service-item"><span class="bullet">▶</span><div><h3>Illustrazione, Photoediting e 3D</h3><p>illustrazione 3d e a mano libera; ideazione e modellazione di characters e prodotti; postproduzione fotografica avanzata per campagne pubblicitarie.</p></div></div>
         <div class="service-item"><span class="bullet">▶</span><div><h3>Linee di prodotto</h3><p>progetto del packaging e del sistema di identità; adattamento dei contenitori ad altri prodotti.</p></div></div>
         <div class="service-item"><span class="bullet">▶</span><div><h3>Multimedia</h3><p>progettazione grafica di siti web; progettazione e impaginazione esecutiva di brochure digitali interattive.</p></div></div>
+        <div class="service-item"><span class="bullet">▶</span><div><h3>Social Media</h3><p>strategia di comunicazione di pagine e profili; progetto di campagne.</p></div></div>
+        <div class="service-item"><span class="bullet">▶</span><div><h3>Consulenza</h3><p>ricerca e analisi; strategia e posizionamento; consulenza continuativa; affiancamento a reparti marketing.</p></div></div>
+      </div>
+
+      <h3 class="exp-titolo">strumenti</h3>
+      <div class="tools">
+        <div class="tool-band">
+          <div class="tool-level">tutti i giorni</div>
+          <div class="tool-list"><span>Adobe InDesign</span><span>Adobe Illustrator</span><span>Adobe Photoshop</span><span>Adobe Acrobat</span></div>
+        </div>
+        <div class="tool-band">
+          <div class="tool-level">spesso</div>
+          <div class="tool-list"><span>KeyShot</span><span>Notion</span><span>Trello</span><span>Microsoft Office</span></div>
+        </div>
+        <div class="tool-band">
+          <div class="tool-level">all'occorrenza</div>
+          <div class="tool-list"><span>Cinema 4D</span><span>Blender</span><span>Adobe XD</span><span>Tumult Hype</span><span>WordPress</span><span>Figma</span></div>
+        </div>
       </div>
     </section>
 
@@ -463,13 +504,18 @@
   // primo scroll: il logo si riduce in testa ed escono in orizzontale
   // le voci del menù e il logo flush
   var SCROLL_AT = 60;
+  // la barra in testa si costruisce al primo scroll e da lì resta:
+  // tornando in cima non si smonta, così la navigazione è sempre a portata
   // nelle pagine interne la barra in testa c'è già all'apertura: senza,
   // non ci sarebbe modo di navigare senza prima scorrere la pagina
   var SEMPRE_IN_TESTA = true;
+  var inTesta = SEMPRE_IN_TESTA;
   function onScroll(){
-    var scrolled = SEMPRE_IN_TESTA || window.scrollY > SCROLL_AT;
-    sidebar.classList.toggle('scrolled', scrolled);
-    topbar.classList.toggle('show', scrolled);
+    if(inTesta || window.scrollY <= SCROLL_AT){ return; }
+    inTesta = true;
+    sidebar.classList.add('scrolled');
+    topbar.classList.add('show');
+    window.removeEventListener('scroll', onScroll);
   }
   window.addEventListener('scroll', onScroll, { passive:true });
   onScroll();
@@ -479,22 +525,28 @@
   var overlayClose = document.getElementById('overlayClose');
   var lastFocused = null;
 
+  // Le immagini di ogni progetto stanno in schede/<slug>.html e arrivano
+  // solo quando la scheda viene aperta: così la griglia resta leggera.
+  function caricaGalleria(panel){
+    var g = panel.querySelector('.pd-gallery');
+    if(!g || g.getAttribute('data-stato')){ return; }
+    var slug = g.getAttribute('data-scheda');
+    if(!slug){ return; }
+    g.setAttribute('data-stato','in-corso');
+    g.innerHTML = '<p class="pd-caricamento">carico le immagini…</p>';
+    fetch('schede/' + slug + '.html')
+      .then(function(r){ if(!r.ok){ throw new Error(r.status); } return r.text(); })
+      .then(function(html){ g.innerHTML = html; g.setAttribute('data-stato','fatto'); })
+      .catch(function(){ g.innerHTML = ''; g.removeAttribute('data-stato'); });
+  }
+
   function openProject(key){
     var panel = overlay.querySelector('.pd[data-pd="' + key + '"]');
     if(!panel){ return; }
     overlay.querySelectorAll('.pd').forEach(function(p){ p.classList.remove('active'); });
     panel.classList.add('active');
 
-    // la galleria parte dall'immagine della card, senza duplicare i dati nel file
-    var gallery = panel.querySelector('.pd-gallery');
-    var thumb = document.querySelector('.work-open[data-pd="' + key + '"] img');
-    if(gallery && thumb && !gallery.querySelector('img[data-from-card]')){
-      var img = document.createElement('img');
-      img.src = thumb.src;
-      img.alt = thumb.alt;
-      img.setAttribute('data-from-card','');
-      gallery.insertBefore(img, gallery.firstChild);
-    }
+    caricaGalleria(panel);
 
     lastFocused = document.activeElement;
     overlay.hidden = false;
