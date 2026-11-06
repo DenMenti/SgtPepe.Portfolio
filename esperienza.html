@@ -196,6 +196,28 @@
   .exp-brands .list,
   details.credits .credit-body p{ line-height:23px; }
 
+  /* titolo di sezione interno (esperienze, freelancing, mi occupo di…) */
+  .exp-titolo{
+    margin:52px 0 0; font-size:15px; line-height:26px; font-weight:600;
+    letter-spacing:.02em;
+  }
+  .exp-list + .exp-titolo{ margin-top:58px; }
+  .exp-titolo + .exp-list .exp-item:first-child{ margin-top:18px; }
+
+  /* strumenti: niente punteggi, solo tre fasce d'uso */
+  .tools{ margin-top:22px; }
+  .tool-band{ padding:18px 0; border-top:1px solid var(--line); }
+  .tool-band:last-child{ border-bottom:1px solid var(--line); }
+  .tool-level{ color:var(--gray); margin-bottom:10px; }
+  .tool-list{ display:flex; flex-wrap:wrap; gap:7px; }
+  .tool-list span{
+    border:1px solid var(--line); border-radius:999px;
+    padding:4px 12px; font-size:13px; line-height:20px; color:var(--text);
+  }
+
+  /* galleria caricata a richiesta */
+  .pd-caricamento{ color:var(--gray); font-size:14px; margin:0; }
+
   /* ---------- chi sono ---------- */
   .bio{ margin-top:63px; }
   .bio p{ margin:0 0 27px; }
@@ -441,6 +463,7 @@
       <p class="tag">° In My Life</p>
       <hr>
 
+      <h3 class="exp-titolo">esperienze</h3>
       <div class="exp-list">
         <div class="exp-item">
           <div class="exp-years">2016 — OGGI</div>
@@ -457,7 +480,74 @@
           <div class="place">Bologna · senior art director</div>
           <div class="exp-brands">
             <div class="label">principali brands</div>
-            <div class="list">Cefla, Wider Yachts.</div>
+            <div class="list">Cefla, Wider Yachts, Casinò di Campione, New Tom, Castelli.</div>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-years">2000 — 2008</div>
+          <h3>Grafoincisa</h3>
+          <div class="place">Bologna · addetto alla progettazione grafica e fotolito</div>
+          <div class="exp-brands">
+            <div class="label">principali brands e agenzie</div>
+            <div class="list">Coind Meseta, Camst, Studio Salamanca Design, ABC marketing.</div>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-years">1999 — 2000</div>
+          <h3>Nuova ZB</h3>
+          <div class="place">Bologna · tecnico dell'editoria</div>
+          <div class="exp-brands">
+            <div class="label">principali brands e agenzie</div>
+            <div class="list">Scrigno, LdB, Stile di Bologna, Banco Credito Cooperativo.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="exp-titolo">freelancing</h3>
+      <div class="exp-list">
+        <div class="exp-item">
+          <div class="exp-years">2013 — 2016</div>
+          <h3>Birra di Classe</h3>
+          <div class="place">distribuzione birra artigianale italiana</div>
+          <div class="exp-brands">
+            <div class="list">art direction; materiali vari di comunicazione; branding e positioning; stand fiera e pub concept; consulenza di comunicazione per i microbirrifici associati; packaging e illustrazioni.</div>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-years">2010 — 2012</div>
+          <h3>Touchè</h3>
+          <div class="place">agenzia di comunicazione</div>
+          <div class="exp-brands">
+            <div class="list">collaborazione su progetti di autopromozione; cataloghi, advertising.</div>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-years">2009 — 2015</div>
+          <h3>Atos Lombardini</h3>
+          <div class="place">moda e lusso — abbigliamento</div>
+          <div class="exp-brands">
+            <div class="list">direzione artistica e creativa; look-book stagionali; packaging; direzione e assistenza fotografo in fase di shooting; postproduzioni fotografiche avanzate.</div>
+          </div>
+        </div>
+        <div class="exp-item">
+          <h3>Marzocchi</h3>
+          <div class="place">forcelle per biciclette</div>
+          <div class="exp-brands">
+            <div class="list">art direction; cataloghi prodotti; branding prodotti, fotoritocco.</div>
+          </div>
+        </div>
+        <div class="exp-item">
+          <h3>Guess by Marciano</h3>
+          <div class="place">moda e lusso — abbigliamento</div>
+          <div class="exp-brands">
+            <div class="list">art direction; brochures.</div>
+          </div>
+        </div>
+        <div class="exp-item">
+          <h3>Comune di San Giovanni in Persiceto</h3>
+          <div class="place">ente pubblico</div>
+          <div class="exp-brands">
+            <div class="list">collaborazioni varie con ufficio stampa ed ente eventi e cultura.</div>
           </div>
         </div>
       </div>
@@ -473,13 +563,18 @@
   // primo scroll: il logo si riduce in testa ed escono in orizzontale
   // le voci del menù e il logo flush
   var SCROLL_AT = 60;
+  // la barra in testa si costruisce al primo scroll e da lì resta:
+  // tornando in cima non si smonta, così la navigazione è sempre a portata
   // nelle pagine interne la barra in testa c'è già all'apertura: senza,
   // non ci sarebbe modo di navigare senza prima scorrere la pagina
   var SEMPRE_IN_TESTA = true;
+  var inTesta = SEMPRE_IN_TESTA;
   function onScroll(){
-    var scrolled = SEMPRE_IN_TESTA || window.scrollY > SCROLL_AT;
-    sidebar.classList.toggle('scrolled', scrolled);
-    topbar.classList.toggle('show', scrolled);
+    if(inTesta || window.scrollY <= SCROLL_AT){ return; }
+    inTesta = true;
+    sidebar.classList.add('scrolled');
+    topbar.classList.add('show');
+    window.removeEventListener('scroll', onScroll);
   }
   window.addEventListener('scroll', onScroll, { passive:true });
   onScroll();
@@ -489,22 +584,28 @@
   var overlayClose = document.getElementById('overlayClose');
   var lastFocused = null;
 
+  // Le immagini di ogni progetto stanno in schede/<slug>.html e arrivano
+  // solo quando la scheda viene aperta: così la griglia resta leggera.
+  function caricaGalleria(panel){
+    var g = panel.querySelector('.pd-gallery');
+    if(!g || g.getAttribute('data-stato')){ return; }
+    var slug = g.getAttribute('data-scheda');
+    if(!slug){ return; }
+    g.setAttribute('data-stato','in-corso');
+    g.innerHTML = '<p class="pd-caricamento">carico le immagini…</p>';
+    fetch('schede/' + slug + '.html')
+      .then(function(r){ if(!r.ok){ throw new Error(r.status); } return r.text(); })
+      .then(function(html){ g.innerHTML = html; g.setAttribute('data-stato','fatto'); })
+      .catch(function(){ g.innerHTML = ''; g.removeAttribute('data-stato'); });
+  }
+
   function openProject(key){
     var panel = overlay.querySelector('.pd[data-pd="' + key + '"]');
     if(!panel){ return; }
     overlay.querySelectorAll('.pd').forEach(function(p){ p.classList.remove('active'); });
     panel.classList.add('active');
 
-    // la galleria parte dall'immagine della card, senza duplicare i dati nel file
-    var gallery = panel.querySelector('.pd-gallery');
-    var thumb = document.querySelector('.work-open[data-pd="' + key + '"] img');
-    if(gallery && thumb && !gallery.querySelector('img[data-from-card]')){
-      var img = document.createElement('img');
-      img.src = thumb.src;
-      img.alt = thumb.alt;
-      img.setAttribute('data-from-card','');
-      gallery.insertBefore(img, gallery.firstChild);
-    }
+    caricaGalleria(panel);
 
     lastFocused = document.activeElement;
     overlay.hidden = false;
